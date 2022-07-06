@@ -10,11 +10,11 @@ function ForecastDetails(props) {
       <div className="forecast-details__date"> {formattedDate} </div>
       <div className="forecast-details__humidity"> {humidity} </div>
       <div className="forecast-details__windspeed"> {windspeed} </div>
-      <div className="forecast-summary__temperature">
+      <div className="forecast-details__temperature">
         {temperature.max}
         &deg;C
       </div>
-      <div className="forecast-summary__direction">{direction}</div>
+      <div className="forecast-details__direction">{direction}</div>
     </div>
   );
 }

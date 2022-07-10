@@ -18,7 +18,7 @@ function ForecastDetails({ forecast }) {
         {temperature.max}
         &deg;C
       </div>
-      <div className="forecast-details__direction">{wind.direction}</div>
+      <div className="forecast-details__wind_direction">{wind.direction}</div>
     </div>
   );
 }
@@ -37,7 +37,5 @@ ForecastDetails.propTypes = {
       direction: PropTypes.string,
     }),
     humidity: PropTypes.number,
-    direction: PropTypes.string,
-    icon: PropTypes.string,
   }).isRequired,
 };

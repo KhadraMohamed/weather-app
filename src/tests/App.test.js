@@ -12,7 +12,7 @@ describe("App", () => {
         forecast={forecast[0]}
       />
     );
-    const h1Element = screen.getByText(/Leeds, UK/i);
+    const h1Element = screen.getByText(/Manchester, UK/i);
     expect(h1Element).toBeInTheDocument();
   });
 });

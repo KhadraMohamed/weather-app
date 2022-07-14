@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable  no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +16,7 @@ function App() {
   const selectedForecast = forecasts.find(
     (forecast) => forecast.date === selectedDate
   );
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleForecastSelect = (date) => {
     setSelectedDate(date);
@@ -26,28 +28,55 @@ function App() {
       endpoint += `?city=${searchText}`;
     }
 
-    return axios.get(endpoint).then((response) => {
-      setSelectedDate(response.data.forecasts[0].date);
-      setForecasts(response.data.forecasts);
-      setLocation(response.data.location);
-    });
+    return axios
+      .get(endpoint)
+      .then((response) => {
+        setSelectedDate(response.data.forecasts[0].date);
+        setForecasts(response.data.forecasts);
+        setLocation(response.data.location);
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 404) {
+          console.error("Location is not valid", error);
+        }
+        if (status === 500) {
+          console.error("Server error", error);
+        }
+        if (status === 404) {
+          setErrorMessage("No such town or city, try again!");
+          console.error("Location is not valid", error);
+        }
+        if (status === 500) {
+          setErrorMessage("Oops, server error, try again later.");
+          console.error("Server error", error);
+        }
+      });
   };
   useEffect(() => {
     getForecast();
   }, []);
   return (
     <div className="weather-app">
-      <LocationDetails city={location.city} country={location.country} />
+      <LocationDetails
+        city={location.city}
+        country={location.country}
+        errorMessage={errorMessage}
+      />
       <SearchForm
         getForecast={getForecast}
         searchText={searchText}
         setSearchText={setSearchText}
       />
-      <ForecastSummaries
-        forecasts={forecasts}
-        onForecastSelect={handleForecastSelect}
-      />
-      {selectedForecast && <ForecastDetails forecast={selectedForecast} />}
+      {!errorMessage && (
+        <>
+          <ForecastSummaries
+            forecasts={forecasts}
+            onForecastSelect={handleForecastSelect}
+          />
+          {selectedForecast && <ForecastDetails forecast={selectedForecast} />}
+        </>
+      )}
     </div>
   );
 }

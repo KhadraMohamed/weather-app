@@ -19,12 +19,7 @@ function App() {
   const handleForecastSelect = (date) => {
     setSelectedDate(date);
   };
-  const getForecast = (
-    searchText,
-    setSelectedDate,
-    setForecasts,
-    setLocation
-  ) => {
+  const getForecast = () => {
     let endpoint = "http://mcr-codes-weather-app.herokuapp.com/forecast";
 
     if (searchText) {
@@ -37,16 +32,17 @@ function App() {
       setLocation(response.data.location);
     });
   };
-  const handleCitySearch = () => {
-    getForecast(setSelectedDate, setForecasts, setLocation);
-  };
   useEffect(() => {
-    getForecast(setSelectedDate, setForecasts, setLocation);
+    getForecast();
   }, []);
   return (
     <div className="weather-app">
       <LocationDetails city={location.city} country={location.country} />
-      <SearchForm />
+      <SearchForm
+        getForecast={getForecast}
+        searchText={searchText}
+        setSearchText={setSearchText}
+      />
       <ForecastSummaries
         forecasts={forecasts}
         onForecastSelect={handleForecastSelect}
